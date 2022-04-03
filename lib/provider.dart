@@ -30,7 +30,7 @@ FutureProvider<PostalCode> apiProvider = FutureProvider((ref) async {
   return PostalCode.fromJson(jsonData);
 });
 
-FutureProviderFamily<PostalCode, String> apiFamilyProvider = FutureProvider.family<PostalCode, String> ((ref, postalCode) async {
+AutoDisposeFutureProviderFamily<PostalCode, String> apiFamilyProvider = FutureProvider.autoDispose.family<PostalCode, String> ((ref, postalCode) async {
   if (postalCode.length != 7) {
     throw Exception('postalCode must be 7 characters');
   }
