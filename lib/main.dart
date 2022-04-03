@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -34,10 +35,24 @@ class MyHomePage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField()
+            TextField(
+              onChanged: (text) => onPostalCodeChanged(ref, text),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void onPostalCodeChanged(WidgetRef ref, String text) {
+    if (text.length != 7) {
+      return ;
+    }
+    try {
+      int.parse(text);
+      ref.watch(postalCodeProvider.state).state = text;
+      print(text);
+
+    } catch(ex) {}
   }
 }
