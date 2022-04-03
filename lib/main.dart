@@ -27,8 +27,6 @@ class MyHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final postalCode = ref.watch(apiProvider);
     final familyPostalCode = ref.watch(apiFamilyProvider(ref.watch(postalCodeProvider.state).state));
 
     return Scaffold(
@@ -42,28 +40,6 @@ class MyHomePage extends ConsumerWidget {
             TextField(
               onChanged: (text) => onPostalCodeChanged(ref, text),
             ),
-            Text('without family'),
-            Expanded(
-              child: postalCode.when(
-                  data: (data) => ListView.separated(
-                      itemCount: data.data.length,
-                      itemBuilder: (context, index) => ListTile(
-                        title: Column(
-                          children: [
-                            Text(data.data[index].ja.prefecture),
-                            Text(data.data[index].ja.address1),
-                            Text(data.data[index].ja.address2),
-                            Text(data.data[index].ja.address3),
-                            Text(data.data[index].ja.address4),
-                          ],
-                        ),
-                      ),
-                    separatorBuilder: (context, index) => const Divider(color: Colors.black),
-                  ),
-                  error: (error, stack) => Text(error.toString()),
-                  loading: () => const AspectRatio(aspectRatio: 1, child: CircularProgressIndicator())),
-            ),
-            Text('with family'),
             Expanded(
               child: familyPostalCode.when(
                   data: (data) => ListView.separated(
