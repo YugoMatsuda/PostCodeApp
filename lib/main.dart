@@ -28,7 +28,7 @@ class MyHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final postalCode = ref.watch(apiProvider).asData?.value;
+    final postalCode = ref.watch(apiProvider);
 
 
     return Scaffold(
@@ -42,7 +42,26 @@ class MyHomePage extends ConsumerWidget {
             TextField(
               onChanged: (text) => onPostalCodeChanged(ref, text),
             ),
-            Text(postalCode?.data[0].ja.address1 ?? 'No value'),
+            Expanded(
+              child: postalCode.when(
+                  data: (data) => ListView.separated(
+                      itemCount: data.data.length,
+                      itemBuilder: (context, index) => ListTile(
+                        title: Column(
+                          children: [
+                            Text(data.data[index].ja.prefecture),
+                            Text(data.data[index].ja.address1),
+                            Text(data.data[index].ja.address2),
+                            Text(data.data[index].ja.address3),
+                            Text(data.data[index].ja.address4),
+                          ],
+                        ),
+                      ),
+                    separatorBuilder: (context, index) => const Divider(color: Colors.black),
+                  ),
+                  error: (error, stack) => Text(error.toString()),
+                  loading: () => const AspectRatio(aspectRatio: 1, child: CircularProgressIndicator())),
+            )
           ],
         ),
       ),
